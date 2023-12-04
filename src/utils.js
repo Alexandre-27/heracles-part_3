@@ -9,7 +9,7 @@ class TemplateRoot {
   }
 
   render(template) {
-    const fragment = document.createElement("div");
+    const fragment = document.createElement('div');
     fragment.innerHTML = template;
     this.rootElement.appendChild(fragment);
   }
@@ -21,7 +21,7 @@ class FightersTemplate extends TemplateRoot {
   }
 
   createTemplate(hero, enemy) {
-    console.log(hero);
+    console.log(hero)
     const fighterTemplate = `<div class="fighters">
       <a href="#hero">
         <figure class="heracles">
@@ -36,7 +36,7 @@ class FightersTemplate extends TemplateRoot {
       </figure>
     </div>`;
 
-    this.render(fighterTemplate);
+    this.render(fighterTemplate)
   }
 }
 
@@ -46,11 +46,11 @@ class FightersTemplate extends TemplateRoot {
  */
 class HeroInfoTemplate extends TemplateRoot {
   constructor(root) {
-    super(root);
+    super(root)
   }
 
   createHeroInfoTemplate(hero) {
-    console.log(hero);
+    console.log(hero)
     const heroInfoTemplate = `<div class="hero" id="hero">
           <a href="#" class="close" onclick="closeModal()">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
@@ -64,9 +64,7 @@ class HeroInfoTemplate extends TemplateRoot {
           <div data-slot="Shield" class="slot">
             <img src="${hero.shield.image}" alt="shield">
           </div>
-          <div data-slot="Vehicle" class="slot">
-            <img src="${hero.vehicle.image}" alt="hélicoptère">
-          </div>
+          <div data-slot="Secondary weapon" class="slot"></div>
           <div data-slot="Head" class="slot"></div>
           <div data-slot="Ring" class="slot"></div>
           <div data-slot="Armory" class="slot"></div>
@@ -77,9 +75,7 @@ class HeroInfoTemplate extends TemplateRoot {
               ${hero.getDefense ? hero.getDefense() : ""}
           </div>
           <div data-slot="Life" class="slot statistic">${hero.life}</div>
-          <div data-slot="Range" class="slot statistic">${
-            hero.getRange ? hero.getRange() : ""
-          }</div>
+          <div data-slot="Range" class="slot statistic">${hero.getRange ? hero.getRange() : ""}</div>
       </div>
       <div class="character">
           <h2 class="name">Heracles</h2>
@@ -90,7 +86,7 @@ class HeroInfoTemplate extends TemplateRoot {
       </div>
     </div>`;
 
-    this.render(heroInfoTemplate);
+    this.render(heroInfoTemplate)
   }
 }
 
@@ -105,28 +101,18 @@ class ArenaTemplate extends TemplateRoot {
   }
 
   checkFighters(arena, i, j) {
-    let img = "";
-    arena.monsters.forEach((monster) => {
+    let img = '';
+    arena.monsters.forEach(monster => {
       if (monster.x === i && monster.y === j) {
         img = `<img
-          title="Distance to ${arena.hero.name} ${
-          arena.getDistance ? arena.getDistance(monster, arena.hero) : ""
-        }" 
+          title="Distance to ${arena.hero.name} ${arena.getDistance ? arena.getDistance(monster, arena.hero) : ""}" 
           alt="${monster.name}" src="${monster.image}"
-          class="monster ${
-            arena.isTouchable
-              ? arena.isTouchable(arena.hero, monster)
-                ? "touchable"
-                : "untouchable"
-              : ""
-          }"
-        >`;
+          class="monster ${arena.isTouchable ? (arena.isTouchable(arena.hero, monster) ? 'touchable' : 'untouchable') : ""}"
+        >`
       }
-    });
+    })
     if (arena.hero.x === i && arena.hero.y === j) {
-      img = `<img title="Mon Hero, portée de ${
-        arena.hero.getRange ? arena.hero.getRange() : ""
-      }" alt="${arena.hero.name}" src="${arena.hero.image}" >`;
+      img = `<img title="Mon Hero, portée de ${arena.hero.getRange ? arena.hero.getRange() : ""}" alt="${arena.hero.name}" src="${arena.hero.image}" >`
     }
     return img;
   }
@@ -140,12 +126,11 @@ class ArenaTemplate extends TemplateRoot {
         </div>`);
       }
     }
-    const arenaTemplate = `<div class="map" style="--tiles-number: ${
-      arena.size
-    }">
-      ${arenaDiv.join("")}
+    const arenaTemplate = `<div class="map" style="--tiles-number: ${arena.size}">
+      ${arenaDiv.join('')}
     </div>`;
 
-    this.render(arenaTemplate);
+    this.render(arenaTemplate)
   }
 }
+

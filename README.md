@@ -2,45 +2,38 @@
  
 Prerequisite: clone this *repository*.
 
-
-> To begin, let's have a quick look at the code. In this new challenge, we will integrate an HTML interface to improve our game.
-So you will find an *index.html* file and a linked *style.css* file. 
-You will notice that all of our class files no longer need to be exported as modules, and we no longer import them into our *index.js* file. All the import logic now happens at the bottom of our *index.html* file. BE CAREFUL, the order of the files is therefore very IMPORTANT.
-In the *index.html* file, there is almost nothing. The html templates are prepared and injected directly, as the objects are implemented. You can browse them but you do not need to touch them in the process of the workshop. However, you will be ask to consume some of its features.
+> Reminder => In this new challenge, we are integrating an HTML interface to improve our game.
+So you will find an *index.html* file and a linked *style.css* file. At the bottom of the *index.html*, you will find the imports of the different *js* files. Please note that the order is important.
+In the *index.html* file, there is almost nothing. The html templates are prepared and injected directly, as the objects are implemented. You can browse them but do not need to touch them on the process of the workshop. However, you will be ask to consume some of its features.
 
 > The HTML `Hero` zone is created directly from the *index.js (line 18 to 20)*.
 
-## Heritage
+## Reminder part 1
 
-A new challenge awaits our champion, slaying the monstrous birds of Lake Stymphalus. Heracles (and his equipment) as well as three birds are already instantiated in *index.js (Line 3 to 16)*.
+> In the first part of the workshop, we integrated our `Fighter` into our `Arena`. For this, we learned the inheritance for our `Hero` and `Monster`. All is back and done yet (Correction)
 
-> Currently both birds and heroes are instances of the `Fighter` class. However, if they have common properties specific to fighters (name, life, dexterity, strength...) some characteristics differ. For example, only `Hero` will be able to wear equipment (Shield, Weapon...).
+## Keep your distance
 
-> It should therefore not be possible to attribute a sword to a bird, but it is currently possible. To solve this design problem, you have to go through inheritance.
+> Now that the fighters all have a position, let's try to exploit this new information. First of all, it would be interesting to know the distance between the `hero` and each of the `monsters`.
 
-- Created two classes `Hero` and `Monster`, each inheriting from `Fighter`. The properties common to both will remain in Fighter, those specific to `Hero` (`Weapon` and `Shield`) will move to `Hero`. The `Monster` class currently only extends `Fighter` without further modification.
-- Moreover, the `getDamage()` and `getDefense()` methods have a different behavior between a monster and a hero. In the first case, only strength and dexterity are taken into account, in the case of the hero, the values ​​returned also take into account the characteristics of weapons and armor. The `getDamage()` and `getDefense()` methods must therefore exist in `Fighter` to reflect the simplest case, and be rewritten in `Hero` to take equipment into account (which normally corresponds to the current code of `Fighter` at the end of the previous workshop).
+- Reminder: to compute the distance between two points A and B on a map, apply the following formula (which is the Pythagorean theorem).
 
-- In *index.js*, modify the instantiations to take into account its new classes, `Hero` for Heracles and `Monster` for the 3 *birds*. (Line 3, 14, 15, 16)
+![](https://wikimedia.org/api/rest_v1/media/math/render/png/b337eb9100bc60a3125751271848230ad2a0d447)
 
-## Arena
+HINT: in JS, the square root is calculated using the [`Math.sqrt()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/ sqrt) and power via the [`Math.pow()` function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/pow).
 
-> Another design change appears with this new event. Here, Heracles no longer fights against a single monster, but against a multitude. Currently, a Fighter doesn't have a way to know all the other Fighters in the fight. It would be possible to create an `adversaries` property in `Fighter`, but each Fighter would have to contain all the others, which would be quite redundant and not allow an easy overview.
+Create a `getDistance()` method in Arena taking 2 `Fighter` objects as parameters, and returning the distance between these two fighters. Don't forget to round it to 2 decimals (`toFixed()`). Once done, refresh. The distance should be displayed on the map when hovering over a bird with the mouse.
 
-> A better solution is to create a new class `Arena` which would contain all the `Fighter` as well as methods to manipulate them (make them fight each other, move them around the arena, etc.). In addition, this arena can be used as a support for a map on which to place the `Fighter` and thus add positioning to the gameplay of our game.
+- Now that you can calculate a distance, add the notion of "range" to the attacks. Basically, a fighter without a weapon should be able to hit only an adversary on an adjacent square. Add to `Fighter` the `range` property (float at 1 by default) and the `getRange()` method (which will return the value of the range property).
 
-- Created an `Arena` class containing the properties `monsters` (an array of `Monster` objects) and `hero` (a `Hero` object). For simplicity, we will assume that we necessarily have a single hero in an arena and one or more monsters.
-Also create a `constructor()` which will take a hero and an array of monsters as parameters. Also add a `size` property (integer with default value 10) which will indicate the size of the arena.
-Then don't forget to add it at the bottom of the *index.html* file with the other POO files
+- In `Arena`, create an `isTouchable()` method taking the attacker as 1st parameter and the attacked as second. This method must return `true` if the attacked is within the range of the attacker, i.e. if the distance between the two fighters is less than or equal to the range (*use getRange()*) of the attacker. Once done, refresh. You should see the birds appear in color within range of Heracles, and in gray those that are not. Don't hesitate to modify the coordinates of the hero to make the distances vary.
 
-- We want to position fighters in the arena: add the `x` and `y` properties in `Fighter` and modify `Monster` and `Hero`. This will allow you to give a position to the fighters (Remember to add the values ​​between 1 and 10 when instantiating them with `new`)
+- Then add a `range` property (float at 0.5 by default) on weapons.
 
-- In *index.js*, create an `Arena` type object by passing it `heracles` and the three `birds` that you will have put in an array.
+- In `Hero` only, add a `getRange()` which will add to the base range of the fighter the range of the weapon he is carrying (for a `Hero`, it is therefore this method customized `getRange()` which will execute instead of `getRange()` from `Fighter`. So Heracles with a sword should have a range of 1.5 (which should allow him to attack diagonally now). Don't hesitate to change hero coordinates to see if all is working well.
 
-- Now add this code under your `Arena` instantiation
-> const ArenaHTML = new ArenaTemplate('arena');
-ArenaHTML.createArena(<< My Arena instance >>);
+- In *index.js*, create a new weapon `bow`, instance of Weapon, which has a range of 5, damage of 8, and the image 'bow.svg'. Assign this weapon to Heracles instead of his current sword. Refresh and check in the inventory that the weapon appears well.
+On the map, you should see that the birds are "touchable" from further away since this weapon has a much larger *range*.
 
-- Update: you must see them on a map representing your arena and your fighters on it! Modify the coordinates of each one, they must move accordingly!
- 
-The next step will be to attack the birds: this will be the second part of this workshop;)
+## End of the fight
+> By artificially moving our hero on the map, he will be able to fight against each of the birds independently, without them being able to counterattack him. Victory is assured. Congratulation !!!

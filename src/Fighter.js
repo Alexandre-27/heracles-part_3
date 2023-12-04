@@ -9,7 +9,7 @@ class Fighter {
     this.image = image;
     this.x = x;
     this.y = y;
-    this.vehicle = null;
+    this.range = 1;
   }
 
   /**
@@ -22,23 +22,25 @@ class Fighter {
     defender.life = Math.max(defender.life - damages, 0);
   }
 
-  /**
-   * Calculate the value of the defense
-   * @returns
-   */
-
-  getDamage() {
-    return this.vehicle ? this.strength + this.vehicle.damage : this.strength;
+  getRange() {
+    return this.range;
   }
 
   /**
    * Calculate the value of the attack
    * @returns
    */
+  getDamage() {
+    return this.weapon ? this.strength + this.weapon.damage : this.strength;
+  }
 
+  /**
+   * Calculate the value of the defense
+   * @returns
+   */
   getDefense() {
-    return this.vehicle
-      ? this.dexterity + this.vehicle.shielding
+    return this.shield
+      ? this.dexterity + this.shield.protection
       : this.dexterity;
   }
 

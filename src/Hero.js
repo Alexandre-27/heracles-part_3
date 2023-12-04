@@ -1,29 +1,19 @@
 class Hero extends Fighter {
-  constructor(name, strength, dexterity, image, x, y, vehicle) {
-    super(name, strength, dexterity, image, x, y, vehicle);
-    this.weapon = null;
-    this.shield = null;
+  constructor(name, strength, dexterity, image, x, y) {
+    super(name, strength, dexterity, image, x, y);
   }
 
   getDamage() {
-    if (this.vehicle && this.weapon) {
-      return this.vehicle.damage + this.weapon.damage + this.strength;
-    } else if (this.vehicle) {
-      return this.vehicle.damage + this.strength;
-    } else if (this.weapon) {
-      return this.weapon.damage + this.strength;
-    }
-    return this.strength;
+    return this.weapon ? this.strength + this.weapon.damage : this.strength;
+  }
+
+  getRange() {
+    return this.weapon ? this.range + this.weapon.range : this.range;
   }
 
   getDefense() {
-    if (this.vehicle && this.shield) {
-      return this.vehicle.shielding + this.shield.protection + this.dexterity;
-    } else if (this.vehicle) {
-      return this.vehicle.shielding + this.dexterity;
-    } else if (this.shield) {
-      return this.shield.protection + this.dexterity;
-    }
-    return this.dexterity;
+    return this.shield
+      ? this.dexterity + this.shield.protection
+      : this.dexterity;
   }
 }
